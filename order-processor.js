@@ -2,10 +2,18 @@
 
 const stripeClient = require('./stripe-client');
 
-function process(order) {
-  const customer = order.val().customer;
-  const paymentSource = order.val().payment;
-  stripeClient.addCustomerWithPaymentSource(customer, paymentSource);
+function process(orderData) {
+  const order = orderData.val();
+  return addCustomerToStripe(order)
+    .then(addChargeToStripe(order));
+}
+
+function addCustomerToStripe(order) {
+  return stripeClient.addCustomerWithPaymentSource(order.customer, order.payment);
+}
+
+function addChargeToStripe(order) {
+  return (customerId) => stripeClient.addCharge(order.product, customerId);
 }
 
 module.exports = {
