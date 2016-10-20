@@ -1,0 +1,19 @@
+{
+  "name": "firebase-node-stripe",
+  "version": "0.0.1",
+  "description": "Node service which adds a charge and customer to stripe for every order added to firebase database.",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha specs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thisdotrob/firebase-node-stripe.git"
+  },
+  "author": "Rob Stevenson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thisdotrob/firebase-node-stripe/issues"
+  },
+  "homepage": "https://github.com/thisdotrob/firebase-node-stripe#readme"
+}
