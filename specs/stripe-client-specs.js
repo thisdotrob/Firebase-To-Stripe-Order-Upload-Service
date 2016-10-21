@@ -77,8 +77,9 @@ describe('stripe client (unit)', () => {
     it('Should create a charge on Stripe', () => {
       const product = { price: 3.99 };
       const customerId = '0123456789';
+      const chargeId = '9876543210';
 
-      stripe.charges.create.returns(Promise.resolve());
+      stripe.charges.create.returns(Promise.resolve({ id: chargeId }));
 
       return stripeClient.addCharge(product, customerId)
         .then(() => {
@@ -89,6 +90,20 @@ describe('stripe client (unit)', () => {
           }];
 
           stripe.charges.create.lastCall.args.should.eql(expectedArgs);
+        });
+    });
+
+    it('Should return the customer ID and the created charge\'s Stripe ID', () => {
+      const product = { price: 3.99 };
+      const customerId = '0123456789';
+      const chargeId = '9876543210';
+
+      stripe.charges.create.returns(Promise.resolve({ id: chargeId }));
+
+      return stripeClient.addCharge(product, customerId)
+        .then(result => {
+          result.customerId.should.equal(customerId);
+          result.chargeId.should.equal(chargeId);
         });
     });
 
