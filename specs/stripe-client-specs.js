@@ -11,7 +11,7 @@ const stripe = {
 
 const stripeLib = sinon.stub().returns(stripe);
 
-const stripeClient = proxyquire('../stripe-client', {
+const stripeClient = proxyquire('../lib/stripe-client', {
   'stripe': stripeLib,
 });
 

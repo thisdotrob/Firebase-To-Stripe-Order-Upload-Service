@@ -7,7 +7,7 @@ const sinon = require('sinon');
 const stripeClient = {};
 const firebaseUpdater = {};
 
-const orderProcessor = proxyquire('../order-processor', {
+const orderProcessor = proxyquire('../lib/order-processor', {
   './stripe-client': stripeClient,
   './firebase-updater': firebaseUpdater,
 });
