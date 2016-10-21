@@ -23,6 +23,7 @@
     "sinon": "^1.17.6"
   },
   "dependencies": {
+    "firebase": "^3.5.1",
     "stripe": "^4.12.0"
   }
 }
