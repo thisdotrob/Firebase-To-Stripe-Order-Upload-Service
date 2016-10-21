@@ -1,6 +1,6 @@
 'use strict';
 
-const stripe = require('stripe');
+const stripe = require('stripe')(process.env.STRIPE_API_KEY);
 
 function addCustomerWithPaymentSource(customer, payment) {
   return stripe.customers.create({
