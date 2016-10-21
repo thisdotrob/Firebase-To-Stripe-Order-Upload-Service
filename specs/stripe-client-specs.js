@@ -40,7 +40,6 @@ describe('stripe client (unit)', () => {
       return stripeClient.addCustomerWithPaymentSource(customer, payment)
         .then(() => {
           const expectedArgs = [{
-            id: customer.id,
             email: customer.email,
             description: customer.name,
             source: {
