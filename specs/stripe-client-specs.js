@@ -23,7 +23,7 @@ describe('stripe client (unit)', () => {
     stripeLib.lastCall.args.should.eql([process.env.STRIPE_API_KEY])
   });
 
-  describe('stripeClient.addCustomerWithPaymentSource (unit)', () => {
+  describe('stripeClient.addCustomerWithPaymentSource', () => {
     it('Should create a customer on Stripe', () => {
       const customer = { id: 'C1', email: 'nobody@xmail.com', name: 'bob' };
       const payment = {
@@ -31,7 +31,9 @@ describe('stripe client (unit)', () => {
         details: { cvc: 222, expiry: '02/2020', number: '4000 0566 5566 5556' },
       };
 
-      stripe.customers.create.returns(Promise.resolve());
+      const createdCustomer = { id: '0123456789' };
+
+      stripe.customers.create.returns(Promise.resolve(createdCustomer));
 
       return stripeClient.addCustomerWithPaymentSource(customer, payment)
         .then(() => {
@@ -51,6 +53,21 @@ describe('stripe client (unit)', () => {
 
           stripe.customers.create.lastCall.args.should.eql([expectedArgs]);
         });
+    });
+
+    it('Should return the created customer\'s Stripe ID', () => {
+      const customer = { id: 'C1', email: 'nobody@xmail.com', name: 'bob' };
+      const payment = {
+        type: 'card',
+        details: { cvc: 222, expiry: '02/2020', number: '4000 0566 5566 5556' },
+      };
+
+      const createdCustomer = { id: '0123456789' };
+
+      stripe.customers.create.returns(Promise.resolve(createdCustomer));
+
+      return stripeClient.addCustomerWithPaymentSource(customer, payment)
+        .then(result => result.should.equal(createdCustomer.id));
     });
 
   });
