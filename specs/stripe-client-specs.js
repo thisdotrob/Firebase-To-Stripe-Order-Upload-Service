@@ -6,6 +6,7 @@ const sinon = require('sinon');
 
 const stripe = {
   customers: {},
+  charges: {},
 };
 
 const stripeLib = sinon.stub().returns(stripe);
@@ -16,7 +17,8 @@ const stripeClient = proxyquire('../stripe-client', {
 
 beforeEach(() => {
   stripe.customers.create = sinon.stub();
-})
+  stripe.charges.create = sinon.stub();
+});
 
 describe('stripe client (unit)', () => {
   it('Should intialize the stripe library with the API key', () => {
@@ -37,8 +39,7 @@ describe('stripe client (unit)', () => {
 
       return stripeClient.addCustomerWithPaymentSource(customer, payment)
         .then(() => {
-
-          const expectedArgs = {
+          const expectedArgs = [{
             id: customer.id,
             email: customer.email,
             description: customer.name,
@@ -49,9 +50,9 @@ describe('stripe client (unit)', () => {
               object: payment.type,
               cvc: payment.details.cvc,
             },
-          };
+          }];
 
-          stripe.customers.create.lastCall.args.should.eql([expectedArgs]);
+          stripe.customers.create.lastCall.args.should.eql(expectedArgs);
         });
     });
 
@@ -68,6 +69,27 @@ describe('stripe client (unit)', () => {
 
       return stripeClient.addCustomerWithPaymentSource(customer, payment)
         .then(result => result.should.equal(createdCustomer.id));
+    });
+
+  });
+
+  describe('stripeClient.addCharge', () => {
+    it('Should create a charge on Stripe', () => {
+      const product = { price: 3.99 };
+      const customerId = '0123456789';
+
+      stripe.charges.create.returns(Promise.resolve());
+
+      return stripeClient.addCharge(product, customerId)
+        .then(() => {
+          const expectedArgs = [{
+            amount: 399,
+            currency: 'GBP',
+            customer: customerId,
+          }];
+
+          stripe.charges.create.lastCall.args.should.eql(expectedArgs);
+        });
     });
 
   });

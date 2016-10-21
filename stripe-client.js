@@ -25,6 +25,17 @@ function addCustomerWithPaymentSource(customer, payment) {
   });
 }
 
+function addCharge(product, customerId) {
+  const chargeArgs = {
+    amount: product.price * 100,
+    currency: 'GBP',
+    customer: customerId,
+  };
+
+  return stripe.charges.create(chargeArgs);
+}
+
 module.exports = {
   addCustomerWithPaymentSource,
+  addCharge,
 };
